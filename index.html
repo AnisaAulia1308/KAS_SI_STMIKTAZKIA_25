@@ -16,8 +16,15 @@
     <p class="subtitle">SI-26 · Rp3.000 / minggu</p>
 
     <div id="login-mhs">
-      <label>Pilih Nama Lo</label>
-      <input type="text" id="search-nama" placeholder="Ketik nama lo..." oninput="filterNama()" autocomplete="off">
+      <div class="nama-header">
+        <span class="nama-header-label">Pilih Nama Lo</span>
+        <span class="nama-header-count" id="nama-count">0 MAHASISWA</span>
+      </div>
+
+      <div class="search-wrapper">
+        <input type="text" id="search-nama" placeholder="Ketik nama lo..." oninput="filterNama()" autocomplete="off">
+      </div>
+
       <div class="nama-list" id="nama-list"></div>
 
       <button class="btn-primary" id="btn-masuk-mhs" onclick="loginMhs()" disabled>
@@ -239,7 +246,6 @@
 
       <div class="bayar-layout">
 
-        <!-- DAFTAR METODE -->
         <div class="panel panel-elevated">
           <div class="panel-header">
             <span class="panel-title">💳 Metode Pembayaran</span>
@@ -258,7 +264,6 @@
           </button>
         </div>
 
-        <!-- FORM TAMBAH/EDIT -->
         <div class="panel panel-elevated hidden" id="metode-form">
           <div class="panel-header">
             <span class="panel-title" id="metode-form-title">Tambah Metode</span>
@@ -297,7 +302,6 @@
           <button class="btn-primary" onclick="saveMetode()">Simpan Metode</button>
         </div>
 
-        <!-- CATATAN GLOBAL -->
         <div class="panel panel-elevated">
           <div class="panel-header">
             <span class="panel-title">📝 Catatan untuk Mahasiswa</span>
