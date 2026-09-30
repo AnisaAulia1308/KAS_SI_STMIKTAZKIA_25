@@ -108,7 +108,7 @@ function saveDB() {
   localStorage.setItem('kas_kelas_db', JSON.stringify(DB));
 }
 
-// ---------- SESSION ----------
+// ---------- STATE ----------
 let CURRENT_USER = null;
 let SELECTED_USER = null;
 let LOGIN_MODE = 'mhs';
@@ -186,6 +186,7 @@ function toggleMode(e) {
 // ---------- NAMA LIST ----------
 function renderNamaList(keyword = '') {
   const list = document.getElementById('nama-list');
+  const counter = document.getElementById('nama-count');
   const kw = keyword.toLowerCase().trim();
 
   const mahasiswa = DB.users.filter(u => !u.isBendahara);
@@ -193,18 +194,33 @@ function renderNamaList(keyword = '') {
     ? mahasiswa.filter(u => u.nama.toLowerCase().includes(kw) || u.nim.includes(kw))
     : mahasiswa;
 
+  if (counter) {
+    counter.textContent = kw
+      ? `${filtered.length} DITEMUKAN`
+      : `${mahasiswa.length} MAHASISWA`;
+  }
+
   if (filtered.length === 0) {
-    list.innerHTML = '<div class="nama-empty">Nama gak ketemu 🤔</div>';
+    list.innerHTML = '<div class="nama-empty">Nama gak ketemu 🤔<br>Coba kata kunci lain</div>';
     return;
   }
 
-  list.innerHTML = filtered.map(u => `
-    <div class="nama-item ${SELECTED_USER?.nim === u.nim ? 'selected' : ''}"
-         onclick="pilihNama('${u.nim}')">
-      <span class="nama-text">${escapeHtml(u.nama)}</span>
-      <span class="nama-nim">${u.nim.slice(-3)}</span>
-    </div>
-  `).join('');
+  list.innerHTML = filtered.map((u, i) => {
+    const initial = u.nama.charAt(0).toUpperCase();
+    const colorClass = `avatar-c${(i % 8) + 1}`;
+
+    return `
+      <div class="nama-item ${SELECTED_USER?.nim === u.nim ? 'selected' : ''}"
+           onclick="pilihNama('${u.nim}')">
+        <div class="nama-avatar ${colorClass}">${initial}</div>
+        <div class="nama-text-wrap">
+          <div class="nama-text">${escapeHtml(u.nama)}</div>
+          <div class="nama-nim">${u.nim}</div>
+        </div>
+        <div class="nama-check">✓</div>
+      </div>
+    `;
+  }).join('');
 }
 
 function filterNama() {
@@ -510,7 +526,6 @@ function renderBendaharaDashboard() {
 // ---------- BAYAR ----------
 function bukaBayar(tagihanId) {
   TAGIHAN_AKTIF = DB.tagihan.find(t => t.id === tagihanId);
-  // Auto pilih metode pertama
   const metode = DB.pengaturan?.metode || [];
   METODE_TERPILIH = metode.length > 0 ? metode[0].id : null;
   go('bayar');
@@ -540,7 +555,6 @@ function renderBayarPage() {
     return;
   }
 
-  // Pastikan yang kepilih masih ada
   if (!metode.find(m => m.id === METODE_TERPILIH)) {
     METODE_TERPILIH = metode[0].id;
   }
@@ -558,7 +572,6 @@ function renderBayarPage() {
 
 function pilihMetode(id) {
   METODE_TERPILIH = id;
-  // Update selected class tanpa re-render semua
   document.querySelectorAll('.metode-card').forEach((el, i) => {
     const metode = DB.pengaturan.metode[i];
     el.classList.toggle('selected', metode && metode.id === id);
@@ -593,7 +606,6 @@ function renderMetodeDetail() {
     return;
   }
 
-  // Bank / e-wallet
   detail.innerHTML = `
     <div class="info-box">
       <div class="copy-row">
