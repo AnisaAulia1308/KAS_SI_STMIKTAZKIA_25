@@ -1,5 +1,5 @@
 // ==========================================
-// KAS KELAS SI-26 — app.js
+// KAS KELAS SI-25 — app.js
 // ==========================================
 
 // ---------- SEED DATA ----------
@@ -14,9 +14,9 @@ const DEFAULT_DATA = {
   nextPembayaranId: 1,
   pengaturan: {
     metode: [
-      { id: 1, tipe: 'bank',    nama: 'BCA',      nomor: '1234567890',  atasNama: 'Bendahara SI-26', catatan: '' },
-      { id: 2, tipe: 'ewallet', nama: 'Dana',     nomor: '08123456789', atasNama: 'Bendahara SI-26', catatan: '' },
-      { id: 3, tipe: 'ewallet', nama: 'OVO',      nomor: '08123456789', atasNama: 'Bendahara SI-26', catatan: '' },
+      { id: 1, tipe: 'bank',    nama: 'BCA',      nomor: '1234567890',  atasNama: 'Bendahara SI-25', catatan: '' },
+      { id: 2, tipe: 'ewallet', nama: 'Dana',     nomor: '08123456789', atasNama: 'Bendahara SI-25', catatan: '' },
+      { id: 3, tipe: 'ewallet', nama: 'OVO',      nomor: '08123456789', atasNama: 'Bendahara SI-25', catatan: '' },
     ],
     nextMetodeId: 4,
     catatanGlobal: 'Tulis NIM lo di berita transfer',
@@ -40,7 +40,8 @@ function seedUsers() {
   ];
 
   const users = [
-    { nim: '251572010001', nama: 'Bendahara SI-26', password: 'password', isBendahara: true },
+    { nim: 'anisaauliacantikbanget', nama: 'Bendahara SI-25', password: 'anisapacarradel', isBendahara: true },
+     { nim: 'mozzasaskiaramanaya', nama: 'Bendahara SI-25', password: 'bendaharaaja', isBendahara: true },
   ];
 
   nama.forEach((n, i) => {
