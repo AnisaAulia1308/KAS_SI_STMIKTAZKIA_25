@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kas Kelas SI-26</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="page-login" class="page active">
+  <div class="login-box">
+    <div class="login-logo">◆</div>
+    <h1>KAS KELAS</h1>
+    <p class="subtitle">SI-26 · Rp3.000 / minggu</p>
+
+    <div id="login-mhs">
+      <label>Pilih Nama Lo</label>
+      <input type="text" id="search-nama" placeholder="Ketik nama lo..." oninput="filterNama()" autocomplete="off">
+      <div class="nama-list" id="nama-list"></div>
+
+      <button class="btn-primary" id="btn-masuk-mhs" onclick="loginMhs()" disabled>
+        Masuk
+      </button>
+    </div>
+
+    <div id="login-bendahara" class="hidden">
+      <div id="login-error" class="alert error hidden"></div>
+
+      <label>NIM Bendahara</label>
+      <input type="text" id="login-nim" placeholder="251572010001">
+
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••">
+
+      <button class="btn-primary" onclick="loginBendahara()">Masuk sebagai Bendahara</button>
+    </div>
+
+    <div class="login-toggle">
+      <a href="#" id="toggle-link" onclick="toggleMode(event)">
+        Login sebagai Bendahara →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="page-app" class="page">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">◆</div>
+      <div class="brand-text">
+        <div class="brand-title">Kas Kelas</div>
+        <div class="brand-sub">SI-26</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="sidebar-nav"></nav>
+
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="user-avatar" id="side-avatar">A</div>
+        <div class="user-meta">
+          <div class="user-name" id="side-name">—</div>
+          <div class="user-role" id="side-role">—</div>
+        </div>
+      </div>
+      <button class="btn-logout-icon" onclick="doLogout()" title="Logout">
+        <span>⎋</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ===== VIEW: MAHASISWA ===== -->
+    <section id="view-mhs" class="view">
+      <header class="topbar">
+        <div>
+          <div class="greeting" id="mhs-greeting">Halo 👋</div>
+          <div class="greeting-sub">Selamat datang kembali</div>
+        </div>
+        <div class="topbar-date" id="topbar-date">—</div>
+      </header>
+
+      <div class="hero-card" id="mhs-hero"></div>
+
+      <div class="grid grid-3">
+        <div class="metric">
+          <div class="metric-label">Sudah Dibayar</div>
+          <div class="metric-value" id="mhs-total-bayar">Rp0</div>
+          <div class="metric-trend up">▲ on track</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Tunggakan</div>
+          <div class="metric-value red" id="mhs-tunggakan">Rp0</div>
+          <div class="metric-trend down" id="mhs-tunggakan-sub">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Periode Lunas</div>
+          <div class="metric-value" id="mhs-lunas-count">0/0</div>
+          <div class="metric-trend" id="mhs-lunas-sub">—</div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Tagihan Saya</span>
+            <span class="panel-tag">Periode</span>
+          </div>
+          <div id="mhs-periode-list" class="list-stack"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Aktivitas</span>
+            <span class="panel-tag">Terbaru</span>
+          </div>
+          <div id="mhs-activity" class="activity"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VIEW: BENDAHARA ===== -->
+    <section id="view-bendahara" class="view">
+      <header class="topbar">
+        <div>
+          <div class="greeting">Dashboard Bendahara</div>
+          <div class="greeting-sub">Ringkasan kas kelas</div>
+        </div>
+        <div class="topbar-date" id="topbar-date-2">—</div>
+      </header>
+
+      <div class="hero-card hero-balance">
+        <div class="hero-top">
+          <div>
+            <div class="hero-label">Total Terkumpul</div>
+            <div class="hero-value" id="bend-total">Rp0</div>
+          </div>
+          <div class="hero-badge" id="bend-periode-badge">Periode Aktif</div>
+        </div>
+        <div class="hero-progress">
+          <div class="progress-track">
+            <div class="progress-fill" id="bend-progress-fill" style="width:0%"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="bend-progress-text">0 / 0 mahasiswa</span>
+            <span id="bend-progress-percent">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-4">
+        <div class="metric">
+          <div class="metric-icon gold">◐</div>
+          <div class="metric-label">Sudah Bayar</div>
+          <div class="metric-value" id="bend-sudah">0/0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon amber">◔</div>
+          <div class="metric-label">Menunggu</div>
+          <div class="metric-value yellow" id="bend-pending">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon rose">○</div>
+          <div class="metric-label">Belum Bayar</div>
+          <div class="metric-value red" id="bend-belum">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon emerald">◉</div>
+          <div class="metric-label">Terkumpul</div>
+          <div class="metric-value green" id="bend-terkumpul">Rp0</div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Menunggu Verifikasi</span>
+            <span class="panel-tag alert-tag" id="bend-pending-badge">0</span>
+          </div>
+          <div id="bend-pending-list" class="list-stack"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Status Mahasiswa</span>
+            <span class="panel-tag">Periode Aktif</span>
+          </div>
+          <div id="bend-tagihan-list" class="list-stack scrollable"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VIEW: BAYAR ===== -->
+    <section id="view-bayar" class="view">
+      <header class="topbar">
+        <button class="btn-back" onclick="backToDashboard()">← Kembali</button>
+      </header>
+
+      <div class="bayar-layout">
+        <div class="panel panel-elevated">
+          <div class="panel-header">
+            <span class="panel-title">Pembayaran Kas</span>
+          </div>
+          <h3 id="bayar-periode" style="font-family:Fraunces,serif;font-size:18px;margin:8px 0 4px">—</h3>
+          <div class="nominal-big" id="bayar-nominal-display">Rp3.000</div>
+
+          <label>Pilih Metode Pembayaran</label>
+          <div class="metode-grid" id="metode-grid"></div>
+
+          <div id="metode-detail"></div>
+
+          <label>Nominal yang ditransfer</label>
+          <input type="number" id="bayar-nominal" value="3000">
+
+          <label>Bukti transfer (foto / screenshot)</label>
+          <input type="file" id="bayar-file" accept="image/*">
+
+          <label>Catatan (opsional)</label>
+          <input type="text" id="bayar-catatan" placeholder="contoh: transfer dari BCA">
+
+          <button class="btn-primary" onclick="submitBukti()">Kirim Bukti</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VIEW: PENGATURAN ===== -->
+    <section id="view-pengaturan" class="view">
+      <header class="topbar">
+        <div>
+          <div class="greeting">Pengaturan Kas</div>
+          <div class="greeting-sub">Kelola metode pembayaran</div>
+        </div>
+      </header>
+
+      <div class="bayar-layout">
+
+        <!-- DAFTAR METODE -->
+        <div class="panel panel-elevated">
+          <div class="panel-header">
+            <span class="panel-title">💳 Metode Pembayaran</span>
+            <span class="panel-tag" id="metode-count">0</span>
+          </div>
+
+          <p style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:16px">
+            Tambahin bank, e-wallet, atau QRIS yang lo pakai buat nerima kas. 
+            Mahasiswa bakal bisa pilih salah satu di halaman bayar.
+          </p>
+
+          <div id="metode-list" class="list-stack"></div>
+
+          <button class="btn-primary" onclick="showMetodeForm()" style="margin-top:20px">
+            + Tambah Metode
+          </button>
+        </div>
+
+        <!-- FORM TAMBAH/EDIT -->
+        <div class="panel panel-elevated hidden" id="metode-form">
+          <div class="panel-header">
+            <span class="panel-title" id="metode-form-title">Tambah Metode</span>
+            <button class="modal-x" onclick="hideMetodeForm()">✕</button>
+          </div>
+
+          <input type="hidden" id="metode-id">
+
+          <label>Tipe Metode</label>
+          <select id="metode-tipe" onchange="onMetodeTipeChange()">
+            <option value="bank">🏦 Bank</option>
+            <option value="ewallet">💳 E-Wallet</option>
+            <option value="qris">📱 QRIS</option>
+          </select>
+
+          <label>Nama / Label</label>
+          <input type="text" id="metode-nama" placeholder="BCA / Dana / OVO / QRIS All Payment">
+
+          <div id="metode-nomor-group">
+            <label>Nomor Rekening / HP</label>
+            <input type="text" id="metode-nomor" placeholder="1234567890">
+
+            <label>Atas Nama</label>
+            <input type="text" id="metode-atasnama" placeholder="Nama pemilik">
+          </div>
+
+          <div id="metode-qris-group" class="hidden">
+            <label>Upload Gambar QRIS</label>
+            <input type="file" id="metode-qris-file" accept="image/*" onchange="onQrisUpload(this)">
+            <div id="metode-qris-preview"></div>
+          </div>
+
+          <label>Catatan (opsional)</label>
+          <input type="text" id="metode-catatan" placeholder="contoh: konfirmasi via WA">
+
+          <button class="btn-primary" onclick="saveMetode()">Simpan Metode</button>
+        </div>
+
+        <!-- CATATAN GLOBAL -->
+        <div class="panel panel-elevated">
+          <div class="panel-header">
+            <span class="panel-title">📝 Catatan untuk Mahasiswa</span>
+          </div>
+
+          <p style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:12px">
+            Teks ini bakal muncul di halaman bayar mahasiswa.
+          </p>
+
+          <input type="text" id="setting-catatan" placeholder="contoh: tulis NIM lo di berita transfer">
+
+          <button class="btn-primary" onclick="saveCatatanGlobal()">Simpan Catatan</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav" id="bottom-nav"></nav>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div id="modal-verify" class="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>Verifikasi Bukti</h3>
+      <button class="modal-x" onclick="closeModal()">✕</button>
+    </div>
+    <div id="verify-content"></div>
+    <div class="modal-actions">
+      <button class="btn-danger" onclick="rejectBukti()">Tolak</button>
+      <button class="btn-success" onclick="approveBukti()">Setujui</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
