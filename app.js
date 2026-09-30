@@ -1,5 +1,5 @@
 // ==========================================
-// KAS KELAS SI-25 — app.js
+// KAS KELAS SI-26 — app.js
 // ==========================================
 
 // ---------- SEED DATA ----------
@@ -14,9 +14,9 @@ const DEFAULT_DATA = {
   nextPembayaranId: 1,
   pengaturan: {
     metode: [
-      { id: 1, tipe: 'bank',    nama: 'BCA',      nomor: '1234567890',  atasNama: 'Bendahara SI-25', catatan: '' },
-      { id: 2, tipe: 'ewallet', nama: 'Dana',     nomor: '08123456789', atasNama: 'Bendahara SI-25', catatan: '' },
-      { id: 3, tipe: 'ewallet', nama: 'OVO',      nomor: '08123456789', atasNama: 'Bendahara SI-25', catatan: '' },
+      { id: 1, tipe: 'bank',    nama: 'BCA',      nomor: '1234567890',  atasNama: 'Bendahara SI-26', catatan: '' },
+      { id: 2, tipe: 'ewallet', nama: 'Dana',     nomor: '08123456789', atasNama: 'Bendahara SI-26', catatan: '' },
+      { id: 3, tipe: 'ewallet', nama: 'OVO',      nomor: '08123456789', atasNama: 'Bendahara SI-26', catatan: '' },
     ],
     nextMetodeId: 4,
     catatanGlobal: 'Tulis NIM lo di berita transfer',
@@ -24,28 +24,46 @@ const DEFAULT_DATA = {
 };
 
 function seedUsers() {
+  // ================================================
+  // ✏️ AKUN BENDAHARA — UBAH DI SINI KALO MAU GANTI
+  // ================================================
+  const bendaharaList = [
+    { nim: 'anisabendaharacantik', nama: 'Bendahara Cantik',      password: 'faktabngt' },
+    { nim: 'mozza',                nama: 'Mozza Saskia Ramanaya', password: 'bendaharaaja' },
+  ];
+  // ================================================
+
   const nama = [
     'Mutia Carinna','Cika Oktaviani','Winda Aulia','Rafli Akram Fakhir',
     'Sabian Mugis Prama Putra','Rian Fahmi','Abrar Danendra Kurnia Putra','Najua Hamidah',
     'Ahmad Faiz Zakaria','Eli Nur Aulia','Muhamad Muslim Al-Hanif','Dhiyarachman Maula',
-    'Alifiya Fakhirani Hermawan','Alyatur Rofiah','Maulana Septian','Mozza Saskia Ramanaya',
+    'Alifiya Fakhirani Hermawan','Alyatur Rofiah','Maulana Septian',
     'Apiat Abiansyah','Abdurrohman','Farrel Omar Kadarsyah','M.Hafidz Aulia Saputra',
     'Erma Dwi Melinda','Dayana Maya Lestari','Anisa Aulia','M. Jusan Bahrudin',
     'Muhamad nazril saepulrohman','Wisnu Prameswira Jati','Muhammad Zidan Ar Rizki','Ridwan Hakim',
-    'Naisyra Mazeela Putri Yusman','Muhammad Rizqy Nur Ramadhani','Cantik Rahmi Shofiyanti','Ahmad Nurul Fajar',
+    'Naisyra Mazeela Putri Yusman','Muhammad Rizqy Nur Ramdhani','Cantik Rahmi Shofiyanti','Ahmad Nurul Fajar',
     'Rishy Khoerunnisa','Mutiara Marsandia','Muhammad Bagus Aliyy Rahman','Muhammad Dzaki Al Hassani Ihsan',
     "Muhamad Fuadi Ma'suf",'Naufal Maulid Abu Fakhri','Farid Junaidi','Radel Virdiana',
     'Azza Ummu Habibatulloh','Alya Syahla','Tia Eryanti','Nisa Aprilia',
     'Dieria Febrianti','Muhamad Hassan Musajid','Dzaki Abdurrahman',
   ];
+  // Catatan: Mozza Saskia Ramanaya udah dipindah jadi Bendahara 2
 
-  const users = [
-    { nim: 'anisaauliacantikbanget', nama: 'Bendahara SI-25', password: 'anisapacarradel', isBendahara: true },
-     { nim: 'mozzasaskiaramanaya', nama: 'Bendahara SI-25', password: 'bendaharaaja', isBendahara: true },
-  ];
+  const users = [];
 
+  // Tambah semua bendahara
+  bendaharaList.forEach(b => {
+    users.push({
+      nim: b.nim,
+      nama: b.nama,
+      password: b.password,
+      isBendahara: true,
+    });
+  });
+
+  // Tambah mahasiswa — NIM mulai dari 003
   nama.forEach((n, i) => {
-    const no = String(i + 2).padStart(3, '0');
+    const no = String(i + 3).padStart(3, '0');
     users.push({
       nim: `25157201${no}`,
       nama: n,
@@ -77,7 +95,7 @@ function seedTagihan(users) {
 
 // ---------- STORAGE ----------
 let DB = {};
-const DB_VERSION = 5;
+const DB_VERSION = 7;
 
 function loadDB() {
   const raw = localStorage.getItem('kas_kelas_db');
@@ -248,7 +266,7 @@ function loginBendahara() {
 
   const user = DB.users.find(u => u.nim === nim && u.password === pass && u.isBendahara);
   if (!user) {
-    err.textContent = 'NIM atau password salah.';
+    err.textContent = 'Nama atau password salah.';
     err.classList.remove('hidden');
     return;
   }
