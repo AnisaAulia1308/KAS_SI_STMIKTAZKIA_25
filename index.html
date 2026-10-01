@@ -321,10 +321,24 @@
 
   </main>
 
-  <nav class="bottom-nav" id="bottom-nav"></nav>
+  <!-- NAVIGASI BAWAH SPARTPHONE (DENGAN TOMBOL KELUAR) -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <div class="nav-item active" onclick="navTo('dashboard')">
+      <span class="nav-icon">📊</span>
+      <span>Dashboard</span>
+    </div>
+    <div class="nav-item" onclick="navTo('bayar')">
+      <span class="nav-icon">💳</span>
+      <span>Bayar Kas</span>
+    </div>
+    <div class="nav-item" onclick="doLogout()" style="color: var(--rose, #f43f5e);">
+      <span class="nav-icon">🚪</span>
+      <span>Keluar</span>
+    </div>
+  </nav>
 </div>
 
-<!-- ============ MODAL ============ -->
+<!-- ============ MODAL VERIFIKASI ============ -->
 <div id="modal-verify" class="modal">
   <div class="modal-box">
     <div class="modal-head">
@@ -334,12 +348,12 @@
     
     <div id="verify-content"></div>
 
-    <!-- Area Form Alasan Tolak (Awalnya tersembunyi) -->
+    <!-- Area Form Alasan Tolak -->
     <div id="area-alasan-tolak" class="hidden" style="margin-top: 16px; text-align: left;">
-      <label style="color: var(--rose); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 6px;">
+      <label style="color: var(--rose, #f43f5e); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 6px;">
         Alasan Penolakan:
       </label>
-      <input type="text" id="input-alasan-tolak" placeholder="Contoh: Bukti transfer tidak jelas / nominal kurang" style="width: 100%; padding: 12px 14px; background: rgba(0,0,0,0.4); border: 1px solid rgba(244, 63, 94, 0.4); border-radius: 10px; color: var(--text-main); font-size: 13px; outline: none;">
+      <input type="text" id="input-alasan-tolak" placeholder="Contoh: Bukti transfer tidak jelas / nominal kurang" style="width: 100%; padding: 12px 14px; background: rgba(0,0,0,0.4); border: 1px solid rgba(244, 63, 94, 0.4); border-radius: 10px; color: var(--text-main, #fff); font-size: 13px; outline: none;">
     </div>
 
     <div class="modal-actions" id="verify-default-actions">
@@ -348,7 +362,7 @@
     </div>
 
     <div class="modal-actions hidden" id="verify-reject-actions">
-      <button class="btn-back" onclick="batalPenolakan()" style="font-size: 12px; color: var(--text-dim);">← Batal</button>
+      <button class="btn-back" onclick="batalPenolakan()" style="font-size: 12px; color: var(--text-dim, #6a7194);">← Batal</button>
       <button class="btn-danger" onclick="rejectBuktiKonfirmasi()">Kirim Penolakan</button>
     </div>
   </div>

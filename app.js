@@ -267,14 +267,25 @@ function doLogout() {
   CURRENT_USER = null;
   SELECTED_USER = null;
   saveSession();
-  document.getElementById('search-nama').value = '';
-  document.getElementById('login-nim').value = '';
-  document.getElementById('login-pass').value = '';
-  document.getElementById('btn-masuk-mhs').disabled = true;
+  
+  const searchInput = document.getElementById('search-nama');
+  const nimInput = document.getElementById('login-nim');
+  const passInput = document.getElementById('login-pass');
+  const btnMasuk = document.getElementById('btn-masuk-mhs');
+
+  if (searchInput) searchInput.value = '';
+  if (nimInput) nimInput.value = '';
+  if (passInput) passInput.value = '';
+  if (btnMasuk) btnMasuk.disabled = true;
+
   setLoginMode('mhs');
   renderNamaList('');
   go('login');
+  toast('👋 Berhasil keluar');
 }
+
+// Tambahkan baris ini di bawahnya agar aman dipanggil dari onclick HTML
+window.doLogout = doLogout;
 
 // ---------- NAV ----------
 const MENU_MHS = [
@@ -762,13 +773,17 @@ function openVerify(pembayaranId) {
   const tag = DB_TAGIHAN.find(t => t.id === p.tagihan_id);
   const per = DB_PERIODE.find(x => x.id === tag?.periode_id);
 
+  const gambarHtml = p?.bukti_url 
+    ? `<img src="${p.bukti_url}" class="bukti-img" alt="Bukti transfer" onerror="this.onerror=null;this.src='https://via.placeholder.com/400x300?text=Gambar+Gagal+Dimuat';">`
+    : `<div style="padding: 20px; text-align: center; color: var(--rose);">⚠️ Tidak ada gambar bukti</div>`;
+
   document.getElementById('verify-content').innerHTML = `
-    <p><strong>${escapeHtml(user?.nama || 'Mhs')}</strong></p>
-    <p style="color:var(--text-dim);font-size:12px;font-family:monospace">${user?.nim}</p>
-    <p style="margin-top:14px;font-family:Fraunces,serif;font-size:15px">${per?.nama} · ${rupiah(p.nominal)}</p>
+    <p><strong>${escapeHtml(user?.nama || 'Mahasiswa')}</strong></p>
+    <p style="color:var(--text-dim);font-size:12px;font-family:monospace">${user?.nim || '-'}</p>
+    <p style="margin-top:14px;font-family:Fraunces,serif;font-size:15px">${per?.nama || 'Kas'} · ${rupiah(p.nominal)}</p>
     ${p.metode ? `<p style="font-size:12px;color:var(--gold-soft);margin-top:4px">Metode: ${escapeHtml(p.metode)}</p>` : ''}
     ${p.catatan ? `<p style="font-size:12px;color:var(--text-dim);margin-top:4px">Catatan: ${escapeHtml(p.catatan)}</p>` : ''}
-    <img src="${p.bukti_url}" class="bukti-img" alt="Bukti transfer">
+    ${gambarHtml}
   `;
   document.getElementById('modal-verify').classList.add('active');
 }

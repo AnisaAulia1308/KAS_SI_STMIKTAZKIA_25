@@ -2113,3 +2113,11 @@ html, body {
   min-width: 0;
 }
 .topbar-left .greeting-wrap { min-width: 0; }
+
+.bottom-nav .nav-item[onclick*="doLogout"] {
+  color: #fb7185 !important;
+}
+.bottom-nav .nav-item[onclick*="doLogout"]:active {
+  transform: scale(0.92);
+  opacity: 0.8;
+}
